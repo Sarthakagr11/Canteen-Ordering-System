@@ -1,0 +1,45 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<style>
+  .card-body p{
+    margin-bottom: 4px;
+  }
+  .ud{
+    text-decoration: none;
+  }
+  .ud:hover{
+    text-decoration: underline;
+  }
+</style>
+
+  <main>
+    <div class="row pb-5">
+      {% for item in items %}
+      {% for it in ratings %}
+      {% if forloop.counter == forloop.parentloop.counter %}
+        <div class="col-sm-2">
+          <div class="card p-2 br">
+            <div class="card-body">
+              <h5 class="card-title">{{item.item}}</h5>
+              <p class="card-text">Price : Rs {{item.price}}</p>
+              <p class="card-text">Availibility : {{item.avail}}</p>
+              <p class="card-text">Is Veg : {{item.isveg}}</p>
+              <p class="card-text">Averate Rating : {{it.rating}}</p>
+              {% if item.avail %}
+              <a href="{% url 'auto:tocart' item.hall item.id %}" class="btn btn-primary mt-1">Add To Cart</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:6 and forloop.counter > 0 %}
+          </div><div class="row pb-5">
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </div>
+  </main>
+
+{% endblock %}

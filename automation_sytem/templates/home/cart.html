@@ -1,0 +1,67 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<style>
+  .align{
+    text-align: center;
+  }
+  .margin{
+    margin-left: 40%;
+  }
+</style>
+
+  <main>
+    <div class="row pb-5">
+      {% for order in orders %}
+      <div class="col-sm-3">
+        <div class="card br">
+          <div class="card-body">
+            <h5 class="card-title">{{order.item.item}}</h5>
+            <p class="card-text">Price: ₹{{order.item.price}}</p>
+            <form action="{% url 'auto:savecart' order.id %}" method="post" >
+              {% csrf_token %}
+              Quantity:
+              <input class=demoInput type=number min=0 max=100 name="quant" value={{order.quantity}}>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">              
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:4 and forloop.counter > 0 %}
+        </div><div class="row pb-5">
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div class="card margin align br" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Bill</h5>
+        <p class="card-text bold left">Item Name</p><p class="right bold">Price</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for cost in costs %}
+        <li class="list-group-item"><p class="left">{{cost.name}}</p><p class="right">₹{{cost.cost}}</p></li>
+        {% endfor %}
+        <li class="list-group-item"><p class="right">Total: ₹{{total}}</p></li>
+      </ul>
+      <div class="card-body align">
+        <a href="{% url 'auto:paycart' 3 %}" class="btn btn-primary">Pay Now</a>
+        <a href="{% url 'auto:paycart' 2 %}" class="btn btn-primary">Pay Later</a>
+      </div>
+    </div>
+  </main>
+
+  <script type="text/javascript">
+    let a = document.getElementsByClassName("demoInput");
+
+    clbk = (e) =>{
+      e.target.parentElement.submit()
+    }
+
+    for(let i = 0; i< a.length; i++){
+      a[i].onchange = clbk;
+    }
+  </script>
+  
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+
+<style>
+  .align{
+    text-align: center;
+  }
+</style>
+
+  <main>
+    <div class="row pb-5">
+      {% for order in orders %}
+      <div class="col-sm-2">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">{{order.user}}</h5>
+            <p class="card-text">Item : {{order.item.item}} </p>
+            <p class="card-text">Quantity : {{order.quantity}} </p>
+            {% if order.paystatus == 3 %}
+            <p class="card-text">PayStatus : Requesting for payment confirmation </p>
+            {% elif order.paystatus == 1 %}
+            <p class="card-text">PayStatus : Paid </p>
+            {% if not order.deli  %}
+            <a href="{% url 'auto:payconfirm' 1 order.id %}" class="btn btn-primary right left mt-1">Done</a>
+            {% endif %}
+            {% else %}
+            <p class="card-text">PayStatus : Added to monthly bill </p>
+            {% if not order.deli  %}
+            <a href="{% url 'auto:payconfirm' 1 order.id %}" class="btn btn-primary right left mt-1">Done</a>
+            {% endif %}
+            {% endif %}
+            {% if order.paystatus == 3 %}
+            <a href="{% url 'auto:payconfirm' 0 order.id %}" class="btn btn-primary left mt-1">Paid</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% if forloop.counter|divisibleby:6 and forloop.counter > 0 %}
+        </div><div class="row pb-5">
+      {% endif %}
+      {% endfor %}
+    </div>
+  </main>
+
+{% endblock %}
